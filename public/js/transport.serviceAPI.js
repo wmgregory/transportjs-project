@@ -9,7 +9,10 @@ function TransportServiceAPI() {
 
     // todo: clean this up so it's able to be extended
     function getCoachStationsByPostcode(postcode, distance) {
-        return __getAPI('naptan_coach_stations/postcode', { postcode: postcode, distance: distance });
+        return __getAPI('naptan_coach_stations/postcode', { postcode: postcode, distance: distance })
+            .then(function(response) {
+                return response.result;
+            });
     }
 
     return {
