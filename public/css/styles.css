@@ -3,3 +3,9 @@
 .container {
   margin: 0 auto;
 }
+
+/* line 3, ../sass/_transport.scss */
+.transport__coachstations-map {
+  height: 500px;
+  width: 600px;
+}

@@ -2,7 +2,9 @@ function CoachStations() {
     'use strict';
 
     var getCoachStations = new TransportServiceAPI().getCoachStations();
+    var coachStationsElem = $('.transport__coachstations'); // todo: change to $(this)
 
+    // todo: handle invalid postcode / distance
     function findByPostcode(postcode, distance) {
         return getCoachStations.byPostcode(postcode, distance)
             .then(function( coachStationList ) {
@@ -13,23 +15,37 @@ function CoachStations() {
 
     // todo: clean this up
     function __showList(coachStationList) {
+        var coachStationsListElem = coachStationsElem.find('.transport__coachstations-list');
 
         // clear the existing list
-        $('.transport__coachstations .transport__coachstations-list li').remove();
+        coachStationsListElem.find('li').remove();
 
         // display a new list
         $.each(coachStationList, function(index, coachStation) {
 
-            $('.transport__coachstations .transport__coachstations-list').append(
-                '<li><a class="transport__coachstations-list-item list-group-item">'
+            coachStationsListElem.append(
+                '<li class="transport__coachstations-list-item">'
+                + '<a class="list-group-item" href="#">'
                 + coachStation.name
                 + '</a></li>'
             );
         });
     }
 
-    function __showMap() {
+    function __showMap(coachStationList) {
+        var coachStationMapElem = coachStationsElem.find('.transport__coachstations-map');
 
+        // create map todo: add config
+        coachStationMapElem.googleMap();
+
+        // add markers
+        // todo: remove old markers
+        $.each(coachStationList, function(index, coachStation) {
+            var coords = coachStation.latlong.coordinates.reverse();
+            coachStationMapElem.addMarker({
+            	 coords: coords
+            });
+        });
     }
 
     return {
