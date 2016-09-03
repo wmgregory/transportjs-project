@@ -1,9 +1,9 @@
 {
-  "name": "generator-jquery-bootstrap-simple",
+  "name": "Transport Project",
   "version": "0.0.0",
-  "description": "Simple jQuery & Bootstrap generator ready to develop/test js/html code.",
+  "description": "Simple transport project",
   "main": "",
-  "author": "Julian Sadowski",
+  "author": "",
   "license": "ISC",
   "devDependencies": {
     "bower": "^1.7.2",
