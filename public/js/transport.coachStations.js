@@ -8,13 +8,13 @@ function CoachStations() {
     function findByPostcode(postcode, distance) {
         return getCoachStations.byPostcode(postcode, distance)
             .then(function( coachStationList ) {
-                __showList(coachStationList);
-                __showMap(coachStationList);
+                __showList(postcode, coachStationList);
+                __showMap(postcode, coachStationList);
             });
     }
 
     // todo: clean this up
-    function __showList(coachStationList) {
+    function __showList(postcode, coachStationList) {
         var coachStationsListElem = coachStationsElem.find('.transport__coachstations-list');
 
         // clear the existing list
@@ -32,19 +32,35 @@ function CoachStations() {
         });
     }
 
-    function __showMap(coachStationList) {
+    function __showMap(postcode, coachStationList) {
         var coachStationMapElem = coachStationsElem.find('.transport__coachstations-map');
 
         // create map todo: add config
-        coachStationMapElem.googleMap();
+        coachStationMapElem.googleMap({
+            center: postcode
+        });
+
+        // todo: remove old markers
+        coachStationMapElem.addMarker({
+            id: 'youAreHere',
+            title: 'You are here',
+            text: 'lorem ipsum',
+            address: postcode
+        });
 
         // add markers
-        // todo: remove old markers
         $.each(coachStationList, function(index, coachStation) {
-            var coords = coachStation.latlong.coordinates.reverse();
-            coachStationMapElem.addMarker({
-            	 coords: coords
-            });
+
+            // todo: move to DAO
+            var marker = {
+                id: coachStation.nationalcoachcode,
+                title: coachStation.name,
+                text: 'National coach code: ' + coachStation.nationalcoachcode,
+                distance: coachStation.distance,
+            	coords: coachStation.latlong.coordinates.reverse()
+            };
+
+            coachStationMapElem.addMarker(marker);
         });
     }
 
