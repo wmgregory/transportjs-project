@@ -34,6 +34,7 @@ function CoachStations() {
 
     function __showMap(postcode, coachStationList) {
         var coachStationMapElem = coachStationsElem.find('.transport__coachstations-map');
+        var image = 'https://maps.gstatic.com/tactile/minimap/pegman-offscreen-2x.png';
 
         // create map todo: add config
         coachStationMapElem.googleMap({
@@ -45,7 +46,9 @@ function CoachStations() {
             id: 'youAreHere',
             title: 'You are here',
             text: 'lorem ipsum',
-            address: postcode
+            address: postcode,
+            icon: image,
+            animation: google.maps.Animation.DROP,
         });
 
         // add markers
