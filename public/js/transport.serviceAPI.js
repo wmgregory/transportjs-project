@@ -3,19 +3,28 @@ function TransportServiceAPI() {
 
     var baseUrl = 'https://data.gov.uk/data/api/service/transport/';
 
-    function __getAPI(url, params) {
+    function __getTransportAPI(url, params) {
         return $.get(baseUrl + url, params);
     }
 
-    // todo: clean this up so it's able to be extended
-    function getCoachStationsByPostcode(postcode, distance) {
-        return __getAPI('naptan_coach_stations/postcode', { postcode: postcode, distance: distance })
-            .then(function(response) {
-                return response.result;
-            });
+    function getCoachStations() {
+        var baseUrl = 'naptan_coach_stations/';
+
+        // todo: add error handling
+        function byPostcode(postcode, distance) {
+            return __getTransportAPI(baseUrl + 'postcode', { postcode: postcode, distance: distance })
+                .then(function(response) {
+                    // return just the results
+                    return response.result || [];
+                });
+        }
+
+        return {
+            byPostcode: byPostcode
+        };
     }
 
     return {
-        getCoachStationsByPostcode: getCoachStationsByPostcode
+        getCoachStations: getCoachStations
     };
 }

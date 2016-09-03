@@ -1,22 +1,17 @@
-Transport.prototype.CoachStations = CoachStations;
-
 function CoachStations() {
     'use strict';
 
-    return {
-        findByPostcode: findByPostcode
-    };
+    var getCoachStations = new TransportServiceAPI().getCoachStations();
 
-    //todo: use a service
     function findByPostcode(postcode, distance) {
-        return TransportServiceAPI()
-            .getCoachStationsByPostcode(postcode, distance)
+        return getCoachStations.byPostcode(postcode, distance)
             .then(function( coachStationList ) {
                 __showList(coachStationList);
                 __showMap(coachStationList);
             });
     }
 
+    // todo: clean this up
     function __showList(coachStationList) {
 
         // clear the existing list
@@ -36,4 +31,10 @@ function CoachStations() {
     function __showMap() {
 
     }
+
+    return {
+        findByPostcode: findByPostcode
+    };
 }
+
+Transport.prototype.CoachStations = CoachStations;
