@@ -128,7 +128,7 @@ $(function() {
 
 							if(params.title != "" && params.text != "" && !params.url) {
 								var infowindow = new google.maps.InfoWindow({
-									content: "<h1>"+params.title+"</h1>"+params.text
+									content: "<h3>"+params.title+"</h3>"+params.text
 								});
 
 								var map = $that.data('googleMap');
@@ -189,7 +189,7 @@ $(function() {
 
         			if(params.title != "" && params.text != "" && !params.url) {
           				var infowindow = new google.maps.InfoWindow({
-						content: "<h1>"+params.title+"</h1>"+params.text
+						content: "<h3>"+params.title+"</h3>"+params.text
 					});
 
 					var map = $this.data('googleMap');

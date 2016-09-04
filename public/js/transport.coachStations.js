@@ -1,19 +1,50 @@
+/**
+* CoachStations prototype object
+*/
+Transport.prototype.CoachStations = CoachStations;
+
+/**
+ * CoachStations Service
+ * Creates an instance of CoachStations service to search
+ * for available stations in a given area and display them.
+ *
+ * @constructor
+ * @this {CoachStations}
+ * @extends {Transport} object
+ */
 function CoachStations() {
     'use strict';
 
+    /** @private */
     var getCoachStations = new TransportServiceAPI().getCoachStations();
     var coachStationsElem = $('.transport__coachstations'); // todo: change to $(this)
 
-    // todo: handle invalid postcode / distance
+    /**
+    * Finds and displays a list and map of coach stations by postcode
+    * @todo handle invalid postcode / distance
+    *
+    * @param {postcode} string
+    * @param {distance} number
+    * @return {coachStationList} array
+    */
     function findByPostcode(postcode, distance) {
         return getCoachStations.byPostcode(postcode, distance)
             .then(function( coachStationList ) {
                 __showList(postcode, coachStationList);
                 __showMap(postcode, coachStationList);
+
+                return coachStationList;
             });
     }
 
-    // todo: clean this up
+    /**
+    * Show list of coach stations
+    * @todo clean this up
+    *
+    * @private
+    * @param {postcode} string
+    * @param {coachStationList} array
+    */
     function __showList(postcode, coachStationList) {
         var coachStationsListElem = coachStationsElem.find('.transport__coachstations-list');
 
@@ -32,6 +63,14 @@ function CoachStations() {
         });
     }
 
+    /**
+    * Show map of coach stations
+    * @todo refator into smaller chuncks
+    *
+    * @private
+    * @param {postcode} string
+    * @param {coachStationList} array
+    */
     function __showMap(postcode, coachStationList) {
         var coachStationMapElem = coachStationsElem.find('.transport__coachstations-map');
         var image = 'https://maps.gstatic.com/tactile/minimap/pegman-offscreen-2x.png';
@@ -71,5 +110,3 @@ function CoachStations() {
         findByPostcode: findByPostcode
     };
 }
-
-Transport.prototype.CoachStations = CoachStations;
