@@ -53,13 +53,21 @@ function CoachStations() {
 
         // display a new list
         $.each(coachStationList, function(index, coachStation) {
+            var listText = $('<strong>' + coachStation.name + '</strong>');
 
-            coachStationsListElem.append(
-                '<li class="transport__coachstations-list-item">'
-                + '<a class="list-group-item" href="#">'
-                + coachStation.name
-                + '</a></li>'
-            );
+            var listDistance = $('<span>' + __getDistance(coachStation.distance) + '</span>')
+                .addClass('text-right pull-right');
+
+            var listAnchor = $('<a href="#" />')
+                .addClass('list-group-item')
+                .append(listText)
+                .append(listDistance);
+
+            var listItem = $('<li />')
+                .addClass('transport__coachstations-list-item')
+                .append(listAnchor);
+
+            coachStationsListElem.append(listItem);
         });
     }
 
@@ -84,7 +92,6 @@ function CoachStations() {
         coachStationMapElem.addMarker({
             id: 'youAreHere',
             title: 'You are here',
-            text: 'lorem ipsum',
             address: postcode,
             icon: image,
             animation: google.maps.Animation.DROP,
@@ -93,17 +100,43 @@ function CoachStations() {
         // add markers
         $.each(coachStationList, function(index, coachStation) {
 
+
             // todo: move to DAO
             var marker = {
                 id: coachStation.nationalcoachcode,
                 title: coachStation.name,
-                text: 'National coach code: ' + coachStation.nationalcoachcode,
+                text: __getMapDescription(coachStation),
                 distance: coachStation.distance,
             	coords: coachStation.latlong.coordinates.reverse()
             };
 
             coachStationMapElem.addMarker(marker);
         });
+    }
+
+    /**
+    * Show map description
+    *
+    * @private
+    * @param {coachStation} object
+    * @param {__getMapDescription} string
+    */
+    function __getMapDescription(coachStation) {
+        var nationalCode = '<strong>National coach code:</strong> ' + coachStation.nationalcoachcode;
+        var distance = '<strong>Distance:</strong> ' + __getDistance(coachStation.distance);
+        return nationalCode + '<br />' + distance;
+    }
+
+    /**
+    * Show distance in km
+    *
+    * @private
+    * @param {distance} number
+    * @param {__distance} string
+    */
+    function __getDistance(distance) {
+        var __distance = parseFloat(distance) / 1000;
+        return __distance.toFixed(2)+ 'km' || '';
     }
 
     return {
