@@ -19,6 +19,10 @@ function CoachStations() {
     var getCoachStations = new TransportServiceAPI().getCoachStations();
     var coachStationsElem = $('.transport__coachstations'); // todo: change to $(this)
 
+    // initiate list items
+    __removeListItems();
+    __addListItem('No stations available');
+
     /**
     * Finds and displays a list and map of coach stations by postcode
     * @todo handle invalid postcode / distance
@@ -39,35 +43,19 @@ function CoachStations() {
 
     /**
     * Show list of coach stations
-    * @todo clean this up
     *
     * @private
     * @param {postcode} string
     * @param {coachStationList} array
     */
     function __showList(postcode, coachStationList) {
-        var coachStationsListElem = coachStationsElem.find('.transport__coachstations-list');
 
         // clear the existing list
-        coachStationsListElem.find('li').remove();
+        __removeListItems();
 
         // display a new list
         $.each(coachStationList, function(index, coachStation) {
-            var listText = $('<strong>' + coachStation.name + '</strong>');
-
-            var listDistance = $('<span>' + __getDistance(coachStation.distance) + '</span>')
-                .addClass('text-right pull-right');
-
-            var listAnchor = $('<a href="#" />')
-                .addClass('list-group-item')
-                .append(listText)
-                .append(listDistance);
-
-            var listItem = $('<li />')
-                .addClass('transport__coachstations-list-item')
-                .append(listAnchor);
-
-            coachStationsListElem.append(listItem);
+            __addListItem(coachStation.name, __getDistance(coachStation.distance), '#');
         });
     }
 
@@ -112,6 +100,53 @@ function CoachStations() {
 
             coachStationMapElem.addMarker(marker);
         });
+    }
+
+    /**
+    * remove list items from coachStationsListElem
+    *
+    * @private
+    */
+    function __removeListItems() {
+        var coachStationsListElem = coachStationsElem.find('.transport__coachstations-list');
+        coachStationsListElem.find('li').remove();
+    }
+
+    /**
+    * add list item to coachStationsListElem
+    *
+    * @private
+    * @param {text} string
+    * @param {textRight} string
+    * @param {anchor} string
+    */
+    function __addListItem(text, textRight, anchor){
+        var coachStationsListElem = coachStationsElem.find('.transport__coachstations-list');
+        var listItem = $('<li />')
+            .addClass('transport__coachstations-list-item list-group-item');
+
+        // add text to listItem
+        $('<strong />')
+            .text(text)
+            .appendTo(listItem);
+
+        // append text to right of listItem
+        if (textRight) {
+            $('<span />')
+                .addClass('text-right pull-right')
+                .text(textRight)
+                .appendTo(listItem);
+        }
+
+        // wrap anchor around everything inside listItem
+        if (anchor) {
+            $('<a />')
+                .attr('href', anchor)
+                .addClass('list-group-item')
+                .wrapInner(listItem);
+        }
+
+        coachStationsListElem.append(listItem);
     }
 
     /**
